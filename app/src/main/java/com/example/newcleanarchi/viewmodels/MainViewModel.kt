@@ -1,5 +1,6 @@
 package com.example.newcleanarchi.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,7 +29,9 @@ class MainViewModel @Inject constructor(
             BaseApiResponse(it).execute(
                 onSuccess = { response -> _initResponse.postValue(response) },
                 onError = { errorMsg -> errorToaster.postValue(errorMsg) },
-                onLoading = {}
+                onLoading = {
+                    Log.d("KiritoLoad ", "I'm Loading - init")
+                }
             )
         }
     }
@@ -41,7 +44,9 @@ class MainViewModel @Inject constructor(
             BaseApiResponse(it).execute(
                 onSuccess = {response -> _productList.postValue(response) },
                 onError = { errorMsg -> errorToaster.postValue(errorMsg) },
-                onLoading = {}
+                onLoading = {
+                    Log.d("KiritoLoad ", "I'm Loading - getProducts ")
+                }
             )
         }
     }

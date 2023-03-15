@@ -19,6 +19,7 @@ class MainUseCase @Inject constructor(
     fun init() : Flow<NetworkResult<InitModel>> = flow {
         try {
             val response = initRepository.init()
+            emit(NetworkResult.OnLoading())
             emit(NetworkResult.OnSuccess(response))
         }catch (e : Exception){
             emit(NetworkResult.OnError(e.message.toString()))
@@ -29,7 +30,7 @@ class MainUseCase @Inject constructor(
     fun getProducts() : Flow<NetworkResult<ProductsModel>> = flow {
         try {
             val response = productsRepository.getProducts()
-            Log.d( "ApiCall: ", "${response}")
+            Log.d( "ApiCall: ", "$response")
             emit(NetworkResult.OnSuccess(response))
         }catch (e : Exception){
             emit(NetworkResult.OnError(e.message.toString()))
