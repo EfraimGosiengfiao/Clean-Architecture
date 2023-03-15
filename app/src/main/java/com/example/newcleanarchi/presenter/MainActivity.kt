@@ -24,15 +24,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
     }
 
     override fun ActivityMainBinding.initObserver() {
-        mainViewModel.errorToaster.observe(this@MainActivity){
+        observe(mainViewModel.errorToaster) {
             Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show()
         }
-        mainViewModel.initResponse.observe(this@MainActivity){
-            initText(it)
-        }
-        mainViewModel.productList.observe(this@MainActivity){
-            getProducts(it)
-        }
+        observe(mainViewModel.initResponse, ::initText)
+        observe(mainViewModel.productList, ::getProducts)
     }
 
     private fun initText(initModel: InitModel){
