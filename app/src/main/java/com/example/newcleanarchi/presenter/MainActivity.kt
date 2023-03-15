@@ -35,11 +35,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
         }
     }
 
-    override fun ActivityMainBinding.initialize() {
-
-    }
-
-
     private fun initText(initModel: InitModel){
         binding.InitMessage.text = initModel.toString()
     }
