@@ -1,6 +1,8 @@
 package com.example.data.di
 
+import android.content.SharedPreferences
 import com.example.data.ApiService
+import com.example.data.common.HttpInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,12 +19,15 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideHttpClient() : OkHttpClient{
+    fun provideHttpClient(
+        sharedPreferences: SharedPreferences
+    ) : OkHttpClient{
         return OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .retryOnConnectionFailure(true)
+            .addInterceptor(HttpInterceptor(sharedPreferences))
             .build()
     }
 

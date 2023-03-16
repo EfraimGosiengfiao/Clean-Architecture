@@ -13,17 +13,12 @@ class HttpInterceptor(
 
         val token = sharedPreferences.getString("token","")
         val request = chain.request().newBuilder()
-            .header("Authorization", "$token")
+            .header("Authorization", "Bearer $token")
             .header("Content-Type", "application/json;charset=UTF-8")
             .build()
 
         val response = chain.proceed(request)
-        Log.d( "InterceptorResponse: ",
-            "Endpoint: ${request.url} \nCode: ${response.code} \nResponse: ${response.peekBody(2048).string()}")
-
-        if(response.code != 200){
-            return response.newBuilder().code(200).message("Error").build()
-        }
+        Log.d( "InterceptorResponse: ", "${request.url} ${response.peekBody(2048).string()}")
 
         return response
     }

@@ -1,10 +1,12 @@
 package com.example.newcleanarchi.presenter
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.activity.viewModels
-import com.example.domain.common.NetworkResult
 import com.example.domain.model.InitModel
+import com.example.domain.model.LoginModel
 import com.example.domain.model.ProductsModel
+import com.example.domain.param.LoginParam
 import com.example.newcleanarchi.base.BaseActivity
 import com.example.newcleanarchi.databinding.ActivityMainBinding
 import com.example.newcleanarchi.utils.observe
@@ -20,7 +22,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
 
     override fun ActivityMainBinding.initCall() {
         mainViewModel.init()
-        mainViewModel.getProducts()
     }
 
     override fun ActivityMainBinding.initObserver() {
@@ -29,10 +30,38 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
         }
         observe(mainViewModel.initResponse, ::initText)
         observe(mainViewModel.productList, ::getProducts)
+        observe(mainViewModel.loginResponse, ::login)
     }
 
+    override fun ActivityMainBinding.initialize() {
+
+        binding.apply {
+
+            loginButton.setOnClickListener {
+
+                val loginParam = LoginParam(
+                    username = userName.text.toString(),
+                    password = password.text.toString()
+                )
+                mainViewModel.login(loginParam)
+            }
+
+            productsBtn.setOnClickListener {
+                mainViewModel.getProducts()
+            }
+        }
+
+    }
+
+    @SuppressLint("SetTextI18n")
     private fun initText(initModel: InitModel){
-        binding.InitMessage.text = initModel.toString()
+        binding.InitMessage.text = "${initModel.status}--${initModel.message}"
+    }
+
+    private fun login(loginModel: LoginModel){
+        val token = mainViewModel.sharedPreferences.getString("token", "")
+        binding.token.text = token
+
     }
 
     private fun getProducts(productsModel: ProductsModel){
