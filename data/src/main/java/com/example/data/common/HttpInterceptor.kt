@@ -13,7 +13,7 @@ class HttpInterceptor(
 
         val token = sharedPreferences.getString("token","")
         val request = chain.request().newBuilder()
-            .header("Authorization", "Bearer $token")
+            .header("Authorization", "$token")
             .header("Content-Type", "application/json;charset=UTF-8")
             .build()
 
