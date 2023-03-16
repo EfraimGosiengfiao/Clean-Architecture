@@ -18,7 +18,12 @@ class HttpInterceptor(
             .build()
 
         val response = chain.proceed(request)
-        Log.d( "InterceptorResponse: ", "${request.url} ${response.peekBody(2048).string()}")
+        Log.d( "InterceptorResponse: ",
+            "Endpoint: ${request.url} \nCode: ${response.code} \nResponse: ${response.peekBody(2048).string()}")
+
+        if(response.code != 200){
+            return response.newBuilder().code(200).message("Error").build()
+        }
 
         return response
     }
