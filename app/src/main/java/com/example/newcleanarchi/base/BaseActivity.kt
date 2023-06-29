@@ -10,7 +10,14 @@ abstract class BaseActivity<VB : ViewDataBinding>(
 ) : AppCompatActivity(){
 
     private var _binding : VB? = null
-    val binding : VB get() = _binding as VB
+    val binding : VB get() = _binding.let { binding ->
+
+        when(binding){
+            null -> bindingInflater(layoutInflater)
+            else -> binding
+        }
+
+    }
 
 
     open fun VB.initialize(){}
