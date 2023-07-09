@@ -6,16 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.createViewModelLazy
-import androidx.lifecycle.ViewModel
-import kotlin.reflect.KClass
 
-abstract class BaseFragment<VB : ViewDataBinding, VM: ViewModel>(
+abstract class BaseFragment<VB : ViewDataBinding>(
     private val bindingInflater : (inflater: LayoutInflater) -> VB,
-    model : KClass<out VM>
 ) : Fragment() {
 
-    val viewModel : VM by createViewModelLazy(model, { viewModelStore })
     private var _binding: VB? = null
     val binding : VB get() = _binding.let { binding ->
 
@@ -27,13 +22,13 @@ abstract class BaseFragment<VB : ViewDataBinding, VM: ViewModel>(
     }
 
     open fun VB.initialize(){}
-    open fun VM.initObserver(){}
-    open fun VM.initCall(){}
+    open fun VB.initObserver(){}
+    open fun VB.initCall(){}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = bindingInflater(layoutInflater)
-        viewModel.initCall()
+        binding.initCall()
 
     }
 
@@ -43,7 +38,7 @@ abstract class BaseFragment<VB : ViewDataBinding, VM: ViewModel>(
         savedInstanceState: Bundle?
     ): View? {
         binding.initialize()
-        viewModel.initObserver()
+        binding.initObserver()
         return binding.root
     }
 
